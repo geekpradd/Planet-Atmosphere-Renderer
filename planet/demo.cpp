@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "utility.hpp"
 
 void resize(GLFWwindow *w, int width, int height){
     glViewport(0, 0, width, height);
