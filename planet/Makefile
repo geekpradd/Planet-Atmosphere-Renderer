@@ -10,7 +10,7 @@ SRC1=trial.cpp
 BIN2=demo
 SRC2=demo.cpp 
 BIN3=triangle
-SRC3=triangle.cpp utility.cpp
+SRC3=triangle.cpp include/utility.cpp include/shader.cpp
 
 all: $(BIN1) $(BIN2) $(BIN3)
 $(BIN1): $(SRC1)
