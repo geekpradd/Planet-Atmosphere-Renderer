@@ -5,11 +5,11 @@ LIBS=$(OPENGLLIB) $(GLEWLIB) $(GLFWLIB)
 LDFLAGS=-L/usr/local/lib 
 CPPFLAGS=-I/usr/local/include
 
-BIN1=trial
+BIN1=bin/trial
 SRC1=trial.cpp 
-BIN2=demo
+BIN2=bin/demo
 SRC2=demo.cpp 
-BIN3=triangle
+BIN3=bin/triangle
 SRC3=triangle.cpp include/utility.cpp include/shader.cpp
 
 all: $(BIN1) $(BIN2) $(BIN3)
