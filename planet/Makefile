@@ -11,17 +11,21 @@ BIN2=bin/demo
 SRC2=demo.cpp 
 BIN3=bin/triangle
 SRC3=triangle.cpp include/utility.cpp include/shader.cpp
+BIN4=bin/camera_cube
+SRC4=camera_cube.cpp include/utility.cpp include/shader.cpp
 
 
-all: $(BIN2) $(BIN3) $(BIN1)
+
+all: $(BIN2) $(BIN3) $(BIN1) $(BIN4)
 
 $(BIN1): $(SRC1)
 	g++ $(CPPFLAGS) $(SRC1) -o $(BIN1) $(LDFLAGS) $(LIBS)
 $(BIN2): $(SRC2)
 	g++ $(CPPFLAGS) $(SRC2) -o $(BIN2) $(LDFLAGS) $(LIBS)
-
 $(BIN3): $(SRC3)	
 	g++ $(CPPFLAGS) $(SRC3) -o $(BIN3) $(LDFLAGS) $(LIBS)
+$(BIN4): $(SRC4)	
+	g++ $(CPPFLAGS) $(SRC4) -o $(BIN4) $(LDFLAGS) $(LIBS)
 
 
 

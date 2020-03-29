@@ -8,7 +8,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "include/stb_image.h"
 
 float vertices[] = {
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -67,19 +67,34 @@ glm::vec3 cubePositions[] = {
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
-float zrot = 0;
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); // +Z
+glm::vec3 upperVec = glm::vec3(0.0f, 1.0f, 0.0f); //+Y
+glm::vec3 rightVec = glm::normalize(glm::cross(upperVec, cameraPos)); // +X
+glm::vec3 frontDir = glm::vec3(0.0f, 0.0f, -1.0f);
+float curTime = glfwGetTime();
+
+
 void reshape_viewport(GLFWwindow *w, int width, int height){
     glViewport(0, 0, width, height);
 }
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
   {
     //!Close the window if the ESC key was pressed
+    float deltaTime = glfwGetTime() - curTime;
+    curTime = glfwGetTime(); 
+
+    float speed = 5.0f*deltaTime;
+
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
       glfwSetWindowShouldClose(window, GL_TRUE);
-    else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-      zrot -= 1.0;
-    else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-      zrot += 1.0;
+    else if (key == GLFW_KEY_A && action == GLFW_PRESS)
+      cameraPos = (cameraPos - speed*rightVec);
+    else if (key == GLFW_KEY_D && action == GLFW_PRESS)
+      cameraPos = (cameraPos + speed*rightVec);
+    else if (key == GLFW_KEY_W && action == GLFW_PRESS)
+      cameraPos = (cameraPos + speed*frontDir);
+    else if (key == GLFW_KEY_S && action == GLFW_PRESS)
+      cameraPos = (cameraPos - speed*frontDir);
     
   }
 
@@ -113,10 +128,10 @@ int main(){
     glEnable(GL_DEPTH_TEST);
     // load and generate the texture
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("textures/wall.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("textures/chess.png", &width, &height, &nrChannels, 0);
     if (data)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
@@ -140,27 +155,32 @@ int main(){
     glEnableVertexAttribArray(1);
 
     // follow model viewing pipeline
+    shdr->use();
 
     while (!glfwWindowShouldClose(w)){
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+        
         glBindVertexArray(VAO);
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
         GLuint uniformLoc = glGetUniformLocation(shdr->id, "projection");
         glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        // for camera we will exclusively modify only the view matrix
+        
+
+        glm::mat4 view = glm::lookAt(cameraPos, cameraPos+frontDir, upperVec);
+       
         GLuint viewLoc = glGetUniformLocation(shdr->id, "view");
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
         for (int i=0;i<10; ++i){
+
           glm::mat4 model = glm::translate(glm::mat4(1.0f), cubePositions[i]); 
           float time = glfwGetTime(); 
           model = glm::rotate(model,  glm::radians(20*i + 40*sin(time)), glm::vec3(glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f))));
           GLuint uniformLoc = glGetUniformLocation(shdr->id, "model");
           glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, glm::value_ptr(model));
           
-          shdr->use();
           
           glDrawArrays(GL_TRIANGLES, 0, 36);
         }
