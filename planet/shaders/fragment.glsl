@@ -1,7 +1,8 @@
 #version 330 core
-in vec4 colorOut;
+in vec2 texCoord;
 out vec4 output;
 
+uniform sampler2D TEXTURE;
 void main(){
-    output = colorOut;
+    output = texture(TEXTURE, texCoord);
 }

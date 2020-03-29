@@ -52,3 +52,7 @@ void Shader::use(){
     glUseProgram(id);
 }
 
+void Shader::setFloat(const char* uniformID, float value){
+    glUniform1f(glGetUniformLocation(id, uniformID), value);
+}
+

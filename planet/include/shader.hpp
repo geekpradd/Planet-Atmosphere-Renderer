@@ -4,9 +4,10 @@
 #include "utility.hpp"
 
 class Shader{
-    GLuint id;
     public:
+        GLuint id;
         Shader(const char * vertexSource, const char* fragSource);
         void use();
+        void setFloat(const char* uniformID, float value);
 };
 
