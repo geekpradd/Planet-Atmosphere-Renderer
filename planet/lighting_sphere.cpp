@@ -72,7 +72,17 @@ int main(){
         shdr->setMatrix4f("projection", projection);
         shdr->setVec3f("lightColor", lightColor);
         shdr->setVec3f("objectColor", objectColor);
-        shdr->setVec3f("sourcePos", lightPos);
+        shdr->setVec3f("light.position", lightPos);
+        
+
+        shdr->setVec3f("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+        shdr->setVec3f("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+        shdr->setVec3f("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+        shdr->setVec3f("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+        shdr->setVec3f("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+        shdr->setVec3f("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+        shdr->setFloat("material.shininess", 32.0f);
 
         glBindVertexArray(sph.VAO);
         glDrawArrays(GL_TRIANGLES, 0, sph.vertex_count);

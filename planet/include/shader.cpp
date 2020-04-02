@@ -55,6 +55,9 @@ void Shader::use(){
 void Shader::setFloat(const char* uniformID, float value){
     glUniform1f(glGetUniformLocation(id, uniformID), value);
 }
+void Shader::setInt(const char* uniformID, int value){
+    glUniform1i(glGetUniformLocation(id, uniformID), value);
+}
 
 void Shader::setVec3f(const char* uniformID, glm::vec3 vector){
     glUniform3fv(glGetUniformLocation(id, uniformID), 1, glm::value_ptr(vector));
