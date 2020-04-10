@@ -48,7 +48,8 @@ int main(){
     
     glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 objectColor = glm::vec3(1.0f, 0.5f, 0.31f);
-    glm::vec3 lightPos(17.0f, 0.0f, 0.0f);
+
+    glm::vec3 lightPos(0.0f, 0.0f, 17.0f);
 
 
     while (!glfwWindowShouldClose(w)){
@@ -93,6 +94,7 @@ int main(){
         sourceshdr->setMatrix4f("view", view);
         sourceshdr->setMatrix4f("projection", projection);
         glBindVertexArray(sourcesph.VAO);
+        
         glDrawArrays(GL_TRIANGLES, 0, sourcesph.vertex_count);
 
         glfwSwapBuffers(w);
