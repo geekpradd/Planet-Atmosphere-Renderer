@@ -5,6 +5,17 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+enum Cam_mov {
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN,
+    ROTLEFT,
+    ROTRIGHT
+};
+
 class Camera {
 
 public:
@@ -32,10 +43,6 @@ public:
         pitch += senstivity*delta_y;
         yaw += senstivity*delta_x;
 
-        if (pitch > 89.0f)
-            pitch = 89.0f;
-        if (pitch < -89.0f)
-            pitch = -89.0f;
     }
     
     void modify_fov(double y_offset){
@@ -50,10 +57,11 @@ public:
         }
     }
     
-    void updateTimeCounter(){
+    void updateTimeCounter(float decay = 1.0f){
         deltaTime = glfwGetTime() - curTime;
         curTime = glfwGetTime();
-        speed = 5000.0f*deltaTime; 
+        // std::cout << "decay is " << decay << std::endl;
+        speed = 4500.0f*deltaTime*decay; 
     }
     void updateLookAt(){
         lookAt.y = sin(glm::radians(pitch));
@@ -66,14 +74,17 @@ public:
         return glm::lookAt(cameraPos, cameraPos+lookAt, upperVec);
     }
     
-    void update_camera_position(int key, int action){
-        if (key == GLFW_KEY_A && action == GLFW_PRESS)
-            cameraPos = (cameraPos - speed*rightVec);
-        else if (key == GLFW_KEY_D && action == GLFW_PRESS)
-            cameraPos = (cameraPos + speed*rightVec);
-        else if (key == GLFW_KEY_W && action == GLFW_PRESS)
-            cameraPos = (cameraPos + speed*lookAt);
-        else if (key == GLFW_KEY_S && action == GLFW_PRESS)
-            cameraPos = (cameraPos - speed*lookAt);
+    void KeyboardInput(Cam_mov direction, float deltaTime){
+        
+        float velocity = speed * deltaTime;
+        if(direction == FORWARD)
+            cameraPos += lookAt*velocity;
+        else if(direction == BACKWARD)
+            cameraPos -= lookAt * velocity;
+        else if(direction == RIGHT)
+            cameraPos += rightVec*velocity;
+        else if(direction == LEFT)
+            cameraPos -= rightVec*velocity;
+
     }
 };
