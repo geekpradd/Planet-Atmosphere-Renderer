@@ -61,7 +61,7 @@ public:
         deltaTime = glfwGetTime() - curTime;
         curTime = glfwGetTime();
         // std::cout << "decay is " << decay << std::endl;
-        speed = 4500.0f*deltaTime*decay; 
+        speed = 10000.0f*deltaTime*decay; 
     }
     void updateLookAt(){
         lookAt.y = sin(glm::radians(pitch));

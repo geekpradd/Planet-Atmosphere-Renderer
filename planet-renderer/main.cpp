@@ -85,8 +85,7 @@ int main(){
     glm::vec3 lightPos(0.0f, 0.0f, 17.0f);
     glm::vec3 lightDirection(1.0f, 0.0f, 0.0f);
     ScreenFiller sf;
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_SRC_ALPHA);
+    
     
     while (!glfwWindowShouldClose(w)){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
@@ -162,6 +161,8 @@ int main(){
         atmo->setVec3f("earth_center", glm::vec3(earth));
 
         glm::vec3 lDir = glm::mat3(view)*lightDirection;
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_SRC_ALPHA);
         atmo->setVec3f("light_direction", lDir);
         atmo->setFloat("earth_radius", 5.0f);
         atmo->setFloat("atm_radius", 5.0f*(1.025f));
@@ -169,6 +170,7 @@ int main(){
         glBindVertexArray(sf.VAO);
         glDrawArrays(GL_TRIANGLES, 0, sf.vertex_count);
 
+        glDisable(GL_BLEND);
         glfwSwapBuffers(w);
         glfwPollEvents();
     } // 
